@@ -1,64 +1,46 @@
 <template>
   <div class="container mx-auto text-sm text-gray-600">
     <div class="h-56 flex items-center justify-center">
-      <div class="rounded-full bg-gray-100 flex items-center justify-center py-2 px-5">
-        <TimeTrackerVue v-model="timer" :id="account.id" :maxTime="maxTime" :active="active" @entrar="entrar" @pausar="pausar" @salir="salir" />
-        <div class="bg-gray-300 w-0.5 mx-4 py-4"></div>
-        <AccountVue :account="account" :menu="menu"/>
-      </div>
+      <ToolbarTimerVue :employee="employee" :loading="loading" @clockIn="onClockIn" @clockPause="onClockPause" @clockOut="onClockOut"/>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import TimeTrackerVue from './components/TimeTracker.vue'
-import AccountVue from './components/Account.vue'
 import { ref } from 'vue'
-import { Account } from './interfaces'
-import { getData, clockIn, clockOut } from './services/api'
+import { Employee } from './interfaces'
+import { getDataEmployee, clockIn, clockOut } from './services/api'
+import ToolbarTimerVue from './components/ToolbarTimer.vue'
 
-const timer = ref<Date | null>(null)
-const maxTime = ref<string | null>(null)
-const active = ref<boolean>(false)
-const account = ref<Account>({
-  id: 'b99a6cd9-3a3d-4635-9eea-e089c90ac45a',
-  name: 'Vicente Álvaro',
-  src: 'https://randomuser.me/api/portraits/men/81.jpg'
-})
-const menu = ref<any>(null)
+const employeeId = <string>import.meta.env.VITE_EMPLOYEE_ID
+const employee = ref<Employee | null>(null)
+const loading = ref<boolean>(true)
 
 ready()
 
 async function ready()
 {
-  const data = await getData(account.value.id)
-  timer.value = data.timer
-  active.value = data.active
-  maxTime.value = data.maxTime
+  loading.value = true
+  employee.value = await getDataEmployee(employeeId)
+  loading.value = false
 }
 
-async function entrar({ id }:{ id: string })
+async function onClockIn({ employeeId }:{ employeeId: string })
 {
-  active.value = true
-
-  const data = await clockIn(id)
-  timer.value = data.timer
-  active.value = data.active
-  maxTime.value = data.maxTime
+  loading.value = true
+  employee.value = await clockIn(employeeId)
+  loading.value = false
 }
 
-function pausar({ id }:{ id: string })
+function onClockPause({ employeeId }:{ employeeId: string })
 {
-  console.log('pausar', id)
+  console.log('onClockPause', employeeId)
 }
 
-async function salir({ id }:{ id: string })
+async function onClockOut({ employeeId }:{ employeeId: string })
 {
-  active.value = false
-
-  const data = await clockOut(id)
-  timer.value = data.timer
-  active.value = data.active
-  maxTime.value = data.maxTime
+  loading.value = true
+  employee.value = await clockOut(employeeId)
+  loading.value = false
 }
 </script>

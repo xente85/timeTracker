@@ -1,9 +1,9 @@
-export function restDates(dates: Date[])
+export function diffMiliseconds(date1: Date, date2: Date)
 {
-  return dates.reduce((previousValue, date) => Math.abs(previousValue - date))
+  return date1.getTime() - date2.getTime()
 }
 
-export function msToTime(duration: number)
+export function milisecondsToStringTime(duration: number)
 {
   const seconds = Math.floor((duration / 1000) % 60)
   const minutes = Math.floor((duration / (1000 * 60)) % 60)
