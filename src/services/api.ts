@@ -13,16 +13,15 @@ export async function getDataEmployee(employeeId: string): Promise<Employee| nul
   let employee: Employee | null = null
   try
   {
-      const today = new Date()
-      today.setHours(0, 0, 0, 0)
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
 
-      const resp = await axios.get(urlServer + endPoint, config)
-      employee = getEmployeeInfo(employeeId, today, resp.data.data)
+    const resp = await axios.get(urlServer + endPoint, config)
+    employee = getEmployeeInfo(employeeId, today, resp.data.data)
   }
   catch (err)
   {
-      // Handle Error Here
-      console.error(err)
+    console.error(err)
   }
 
   return employee
@@ -46,28 +45,14 @@ export async function setClock(employeeId: string, endPoint: string): Promise<Em
 
   try
   {
-      await axios.post(urlServer + endPoint, params, config)
+    await axios.post(urlServer + endPoint, params, config)
   }
   catch (err)
   {
-      // Handle Error Here
-      console.error(err)
+    console.error(err)
   }
 
   return getDataEmployee(employeeId)
-}
-
-function getMaxTime()
-{
-  const horas = 8
-  const mHoras = 1000 * 60 * 60 * horas
-  const timeStart = new Date()
-  const timeEnd = new Date(timeStart.getTime() + mHoras)
-
-  const maxTimeMili = diffMiliseconds(timeEnd, timeStart)
-  const maxTime = milisecondsToStringTime(maxTimeMili)
-
-  return maxTime
 }
 
 function getEmployeeInfo(id: string, date: Date, tracks: Track[]): Employee | null
@@ -91,9 +76,21 @@ function getEmployeeInfo(id: string, date: Date, tracks: Track[]): Employee | nu
   }, 0)
 
   employee.totalWorkTime = new Date(date.getTime() + mAcumulado)
-  employee.maxWorkTime = getMaxTime()
-
-  employee.imageProfileURL = employee.imageProfileURL || 'https://randomuser.me/api/portraits/men/81.jpg'
+  employee.maxWorkTime = getFakeMaxTime()
+  employee.imageProfileURL = employee.imageProfileURL || 'https://randomuser.me/api/portraits/women/81.jpg'
 
   return employee
+}
+
+function getFakeMaxTime()
+{
+  const horas = 8
+  const mHoras = 1000 * 60 * 60 * horas
+  const timeStart = new Date()
+  const timeEnd = new Date(timeStart.getTime() + mHoras)
+
+  const maxTimeMili = diffMiliseconds(timeEnd, timeStart)
+  const maxTime = milisecondsToStringTime(maxTimeMili)
+
+  return maxTime
 }
