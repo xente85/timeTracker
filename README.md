@@ -5,6 +5,8 @@ This is a time traker app built with:
 - Vue 3
 - TypeScript
 - Vite
+- Axios
+- Tailwind
 - Eslint
 
 ## Development (node >=v14)
