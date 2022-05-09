@@ -5,15 +5,15 @@
     </div>
     <div class="actions flex ml-5">
       <template v-if="!active">
-        <button class="bg-green-400 hover:bg-green-700 text-white font-bold py-2 px-8 rounded-full mx-1" @click="onClockIn" :disabled="loading">
+        <button class="shadow bg-green-400 hover:bg-green-700 text-white font-bold py-2 px-8 rounded-full mx-1" @click="onClockIn" :disabled="loading">
           Entrar
         </button>
       </template>
       <template v-else>
-        <button class="bg-teal-400 hover:bg-red-700 text-white font-bold py-2 px-8 rounded-full mx-1" @click="onClockPause" :disabled="loading">
+        <button class="shadow bg-teal-400 hover:bg-red-700 text-white font-bold py-2 px-8 rounded-full mx-1" @click="onClockPause" :disabled="loading">
           Pausar
         </button>
-        <button class="bg-orange-400 hover:bg-orange-700 text-white font-bold py-2 px-8 rounded-full mx-1" @click="onClockOut" :disabled="loading">
+        <button class="shadow bg-orange-400 hover:bg-orange-700 text-white font-bold py-2 px-8 rounded-full mx-1" @click="onClockOut" :disabled="loading">
           Salir
         </button>
       </template>
