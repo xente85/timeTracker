@@ -72,17 +72,18 @@ function getMaxTime()
 
 function getEmployeeInfo(id: string, date: Date, tracks: Track[]): Employee | null
 {
-  const dataEmployee = tracks.filter(x =>
-  {
-    const workEntryIn = new Date(x.workEntryIn.date)
-    return x.employee.id === id && isSameDay(date, workEntryIn)
-  })
+  const tracksEmployee = tracks.filter(x => x.employee.id === id)
 
-  const employee = dataEmployee.length > 0 ? dataEmployee[ 0 ].employee : null
-
+  const employee = tracksEmployee.length > 0 ? tracksEmployee[ 0 ].employee : null
   if (!employee) return null
 
-  const mAcumulado = dataEmployee.reduce((previousValue: number, track: Track) =>
+  const tracksEmployeeByDate = tracksEmployee.filter(x =>
+  {
+    const workEntryIn = new Date(x.workEntryIn.date)
+    return isSameDay(date, workEntryIn)
+  })
+
+  const mAcumulado = tracksEmployeeByDate.reduce((previousValue: number, track: Track) =>
   {
     const workEntryIn = new Date(track.workEntryIn.date)
     const workEntryOut = track.workEntryOut ? new Date(track.workEntryOut.date) : new Date()
